@@ -1,5 +1,5 @@
 import phonenumbers
-
+import json
 #класс преподавателей
 
 class Teacher:
@@ -72,7 +72,45 @@ class Teacher:
         self.__department = department
         self.__group_id = group_id
 
-    # инкапсуляция полей с помощью геттеров и сеттеров
+    @classmethod
+    def from_string(cls, s):
+        data = s.split(", ")
+        teacher_id = int(data[0])
+        name = data[1]
+        surname = data[2]
+        patronymic = data[3]
+        phone = data[4]
+        work_experience = int(data[5])
+        department = data[6]
+        group_id = int(data[7])
+        return cls(teacher_id, name, surname, patronymic, phone, work_experience, department, group_id)
+
+    @classmethod
+    def from_json(cls, json_str):  #инициализация класса из данных в формате json
+        data = json.loads(json_str)
+        teacher_id = data["teacher_id"]
+        name = data["name"]
+        surname = data["surname"]
+        patronymic = data["patronymic"]
+        phone = data["phone"]
+        work_experience = data["work_experience"]
+        department = data["department"]
+        group_id = data["group_id"]
+        return cls(teacher_id, name, surname, patronymic, phone, work_experience, department, group_id)
+
+    @classmethod
+    def from_string(cls, s):  #инициализация класса из данных в строковом типе (данные записаны через пробел)
+        data = s.split(", ")
+        teacher_id = int(data[0])
+        name = data[1]
+        surname = data[2]
+        patronymic = data[3]
+        phone = data[4]
+        work_experience = int(data[5])
+        department = data[6]
+        group_id = int(data[7])
+        return cls(teacher_id, name, surname, patronymic, phone, work_experience, department, group_id)
+  # инкапсуляция полей с помощью геттеров и сеттеров
 
     @property
     def teacher_id(self):
@@ -143,8 +181,12 @@ class Teacher:
 
     def __str__(self):
         return f"Teacher ID: {self.teacher_id}, Name: {self.name}, Surname: {self.surname}, Patronymic: {self.patronymic}, Phone: {self.phone}, Work Experience: {self.work_experience}, Department: {self.department}, Group ID: {self.group_id}"
-teacher = Teacher(1, "John", "Doe", "Junior", "+79999999911", 5, "Math", 101)
+teacher = Teacher(1, "John", "Doe", "Junior", "+79919999911", 5, "Math", 101)
 print(teacher.name)
 
 teacher.name = "Jane"
 print(teacher.name)
+with open("example.json", "r") as f:
+    data = f.read()
+    teacher = Teacher.from_json(data)
+    print(teacher)
