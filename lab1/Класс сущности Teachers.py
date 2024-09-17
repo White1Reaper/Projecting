@@ -1,4 +1,3 @@
-import phonenumbers
 import json
 #класс преподавателей
 
@@ -53,24 +52,6 @@ class Teacher:
         if not isinstance(group_id, int) or group_id <= 0:
             raise ValueError("Ошибка ввода id группы")
 
-    def __init__(self, teacher_id, name, surname, patronymic, phone, work_experience, department, group_id):
-        self.val_teacher_id(teacher_id)
-        self.val_name(name)
-        self.val_surname(surname)
-        self.val_patronymic(patronymic)
-        self.val_phone(phone)
-        self.val_work_experience(work_experience)
-        self.val_department(department)
-        self.val_group_id(group_id)
-
-        self.__teacher_id = teacher_id
-        self.__name = name
-        self.__surname = surname
-        self.__patronymic = patronymic
-        self.__phone = phone
-        self.__work_experience = work_experience
-        self.__department = department
-        self.__group_id = group_id
 
     @classmethod
     def from_string(cls, s):
@@ -181,6 +162,19 @@ class Teacher:
 
     def __str__(self):
         return f"Teacher ID: {self.teacher_id}, Name: {self.name}, Surname: {self.surname}, Patronymic: {self.patronymic}, Phone: {self.phone}, Work Experience: {self.work_experience}, Department: {self.department}, Group ID: {self.group_id}"
+
+        def __init__(self, teacher_id, name, surname, patronymic, phone, work_experience, department, group_id):
+
+            self.teacher_id = teacher_id
+            self.name = name
+            self.surname = surname
+            self.patronymic = patronymic
+            self.phone = phone
+            self.work_experience =work_experience
+            self.department = department
+            self.group_id =group_id
+
+    #
 teacher = Teacher(1, "John", "Doe", "Junior", "+79919999911", 5, "Math", 101)
 print(teacher.name)
 
