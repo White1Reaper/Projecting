@@ -1,16 +1,11 @@
 import json
-#класс преподавателей
-
-class Teacher:
-    def __init__(self, teacher_id, name, surname, patronymic, phone, work_experience, department, group_id):
+import re
+class ShortTeacher():
+    def __init__(self, teacher_id, name, surname, patronymic):
         self.__teacher_id = self.val_teacher_id(teacher_id)
         self.__name = self.val_name(name)
         self.__surname = self.val_surname(surname)
         self.__patronymic = self.val_patronymic(patronymic)
-        self.__phone = self.val_phone(phone)
-        self.__work_experience = work_experience
-        self.__department = self.val_department(department)
-        self.__group_id = self.val_group_id(group_id)
 
     @staticmethod
     def val_teacher_id(teacher_id):
@@ -35,10 +30,52 @@ class Teacher:
         if not isinstance(patronymic, str) or not patronymic.strip():
             raise ValueError("Ошибка ввода  отчества ")
         return patronymic
+    @property
+    def teacher_id(self):
+        return self.__teacher_id
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        self.__name=self.val_name(value)
+    @property
+    def surname(self):
+        return self.__surname
+
+    @surname.setter
+    def surname(self, value):
+        self.__surname=self.val_surname(value)
+
+    @property
+    def patronymic(self):
+        return self.__patronymic
+
+    @patronymic.setter
+    def patronymic(self, value):
+        self.__patronymic=self.val_patronymic(value)
+
+    def __str__(self):
+        return f"Teacher ID: {self.teacher_id}, Name: {self.name}, Surname: {self.surname}, Patronymic: {self.patronymic}"
+
+#класс преподавателей
+
+class Teacher(ShortTeacher):
+    def __init__(self, teacher_id, name, surname, patronymic, phone, work_experience, department, group_id):
+        super().__init__(teacher_id,name,surname,patronymic)
+        self.__phone = self.val_phone(phone)
+        self.__work_experience = work_experience
+        self.__department = self.val_department(department)
+        self.__group_id = self.val_group_id(group_id)
+
+
+
 
     @staticmethod
     def val_phone(phone):
-        if not (phone[0] == "+" and phone[1:].isdigit() and len(phone) == 12):
+        if not  re.match('^(\+?7|8)\d{3}\d{3}\d{2}\d{2}$', phone):
             raise ValueError("Ошибка ввода телефона ")
         return phone
 
@@ -99,33 +136,6 @@ class Teacher:
         group_id = int(data[7])
         return cls(teacher_id, name, surname, patronymic, phone, work_experience, department, group_id)
   # инкапсуляция полей с помощью геттеров и сеттеров
-
-    @property
-    def teacher_id(self):
-        return self.__teacher_id
-
-    @property
-    def name(self):
-        return self.__name
-
-    @name.setter
-    def name(self, value):
-        self.__name=self.val_name(value)
-    @property
-    def surname(self):
-        return self.__surname
-
-    @surname.setter
-    def surname(self, value):
-        self.__surname=self.val_surname(value)
-
-    @property
-    def patronymic(self):
-        return self.__patronymic
-
-    @patronymic.setter
-    def patronymic(self, value):
-        self.__patronymic=self.val_patronymic(value)
     @property
     def phone(self):
         return self.__phone
@@ -156,19 +166,27 @@ class Teacher:
     @group_id.setter
     def group_id(self, value):
         self.__group_id=self.val_group_id(value)
+
     def __str__(self): #полный вывод класса
         return f"Teacher ID: {self.teacher_id}, Name: {self.name}, Surname: {self.surname}, Patronymic: {self.patronymic}, Phone: {self.phone}, Work Experience: {self.work_experience}, Department: {self.department}, Group ID: {self.group_id}"
 
     def short_output(self):  # краткий вывод класса
         return f"Teacher ID: {self.teacher_id}, Name: {self.name}, Surname: {self.surname}, Patronymic: {self.patronymic}"
 
-
     def __eq__(self, other):
         if not isinstance(other, Teacher):
             return NotImplemented
+        return (
+                self.teacher_id == other.teacher_id
+                and self.name == other.name
+                and self.surname == other.surname
+                and self.patronymic == other.patronymic
+                and self.phone == other.phone
+                and self.department == other.department
+                and self.group_id == other.group_id
+        )
 
-        return self.__teacher_id==other.__teacher_id and self.__name == other.name and self.__surname==other.__surname and self.__patronymic==other.__patronymic and self.__phone == other.__phone and self.__department==other.__department and self.__group_id==other.__group_id
-teacher = Teacher(1, "John", "Doe", "Junior", "+79949868911", 5, "Math", 101)
+teacher = Teacher(1, "John", "Doe", "Junior", "89949889112", 5, "Math", 101)
 print(teacher.name)
 teacher2=teacher
 teacher2.name = "Jane"
@@ -176,5 +194,7 @@ print(teacher==teacher2)
 with open("example.json", "r") as f:
     data = f.read()
     teacher = Teacher.from_json(data)
-    print(teacher)#полный вывод объекта 
+    print(teacher)#полный вывод объекта
     print(teacher.short_output())# краткий вывод объекта
+    short=ShortTeacher(1, "John", "Doe", "Junior")
+    print(short)
