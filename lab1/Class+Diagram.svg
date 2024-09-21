@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:v='http://schemas.microsoft.com/visio/2003/SVGExtensions/' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' width='1021.8898pt' height='1445.6693pt' viewBox='0 0 1021.8898 1445.6693'>
+ <v:documentProperties>
+  <v:userDefs>
+   <v:ud v:nameU='msvNoAutoConnect' v:val='1'/>
+  </v:userDefs>
+ </v:documentProperties>
+ <g id='SFixTitle'/>
+ <g id='SContent'>
+  <g>
+   <g transform='matrix(1,0,0,-1,0,1445.6693)'>
+    <g transform='matrix(1,0,0,1,439.3701,947.48035)' v:mID='110000'>
+     <title>Shape110000</title>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='1'>
+      <title>Shape1</title>
+      <path d='M0,104.173233032 L0,122.598426819 L0,122.598426819 L138.188980103,122.598426819 L138.188980103,122.598426819 L138.188980103,104.173233032 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <path d='M0,104.173233032 L0,0 L0,0 L138.188980103,0 L138.188980103,0 L138.188980103,104.173233032 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+      <path d='M0,104.173233032 L138.188980103,104.173233032 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+      <g transform='matrix(1,0,0,1,1.4173203,104.8819)'>
+       <text x='45.18222' y='4.949291' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,10.26992)'>ShortTeacher</text>
+      </g>
+     </g>
+     <g transform='matrix(1,0,0,1,0,5.6692924)' v:mID='2'>
+      <title>Shape2</title>
+      <path d='M0,98.503936768 L138.188980103,98.503936768 L138.188980103,98.503936768 L138.188980103,0 L138.188980103,0 L0,0 L0,0 L0,98.503936768 ' stroke='none' stroke-width='0' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <g transform='matrix(1,0,0,1,4.2519684,40.748028)'>
+       <text x='35.1218' y='-24.746458' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,50.309288)'>__teacher_id: int;</text>
+       <text x='38.617878' y='-4.949291' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,50.309288)'>__name: string;</text>
+       <text x='33.399937' y='14.847875' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,50.309288)'>__surname: string;</text>
+       <text x='28.951296' y='34.64504' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,50.309288)'>__patronymic: string;</text>
+      </g>
+     </g>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='3'>
+      <title>Shape3</title>
+      <path d='M0,2.834645748 L138.188980103,2.834645748 ' stroke='#000000' stroke-width='0.70866144' stroke-linecap='round' fill='none'/>
+     </g>
+    </g>
+    <g transform='matrix(1,0,0,1,637.7953,779.5275)' v:mID='410000'>
+     <title>Shape410000</title>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='4'>
+      <title>Shape4</title>
+      <path d='M0,279.212615967 L0,297.637786865 L0,297.637786865 L170.07875061,297.637786865 L170.07875061,297.637786865 L170.07875061,279.212615967 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <path d='M0,279.212615967 L0,0 L0,0 L170.07875061,0 L170.07875061,0 L170.07875061,279.212615967 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+      <path d='M0,279.212615967 L170.07875061,279.212615967 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+      <g transform='matrix(1,0,0,1,1.4173279,279.92123)'>
+       <text x='61.1271' y='4.949291' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,10.26992)'>ShortTeacher</text>
+      </g>
+     </g>
+     <g transform='matrix(1,0,0,1,0,223.22835)' v:mID='5'>
+      <title>Shape5</title>
+      <path d='M0,55.98425293 L170.07875061,55.98425293 L170.07875061,55.98425293 L170.07875061,0 L170.07875061,0 L0,0 L0,0 L0,55.98425293 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <g transform='matrix(1,0,0,1,4.2519684,19.488192)'>
+       <text x='53.32423' y='-9.898582' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__phone: string;</text>
+       <text x='40.09712' y='0' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__work_experience: int;</text>
+       <text x='48.968224' y='9.898582' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__department: int;</text>
+       <text x='53.988808' y='19.797165' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__group_id: int;</text>
+      </g>
+     </g>
+     <g transform='matrix(1,0,0,1,0,217.55907)' v:mID='6'>
+      <title>Shape6</title>
+      <path d='M0,2.834645748 L170.07875061,2.834645748 ' stroke='#000000' stroke-width='0.70866144' stroke-linecap='round' fill='none'/>
+     </g>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='7'>
+      <title>Shape7</title>
+      <path d='M0,217.559066772 L170.07875061,217.559066772 L170.07875061,217.559066772 L170.07875061,0 L170.07875061,0 L0,0 L0,0 L0,217.559066772 ' stroke='none' stroke-width='0' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <g transform='matrix(1,0,0,1,4.2519684,100.27558)'>
+       <text x='37.364292' y='-84.13794' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>val_phone(phone): string;</text>
+       <text x='5.9176826' y='-74.23936' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>val_work_experience(work_experience): int;</text>
+       <text x='23.659895' y='-64.340775' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>val_department(department): int;</text>
+       <text x='34.80466' y='-54.4422' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>val_group_id(group_id): int</text>
+       <text x='56.0349' y='-34.64504' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>phone(): string</text>
+       <text x='41.704185' y='-24.746458' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>work_experience(): int;</text>
+       <text x='50.575294' y='-14.847875' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>department(): int;</text>
+       <text x='55.595875' y='-4.949291' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>group_id(): int;</text>
+       <text x='45.927277' y='14.847875' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>phone(value): string;</text>
+       <text x='32.700165' y='24.746458' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>work_experience(value): int;</text>
+       <text x='41.57127' y='34.64504' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>department(value): int;</text>
+       <text x='46.591854' y='44.54362' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>group_id(value): int;</text>
+       <text x='34.12196' y='64.340775' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>from_string(cls, s): Teacher;</text>
+       <text x='24.852108' y='74.23936' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>from_json(cls, json_str): Teacher;</text>
+       <text x='49.280373' y='84.13794' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>&#160;__str__(): string;&#160;&#160;&#160;</text>
+       <text x='32.007393' y='94.036514' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,109.836845)'>__eq__(self, other): boolean;</text>
+      </g>
+     </g>
+    </g>
+    <g transform='matrix(1,0,0,1,439.3701,814.9607)' v:mID='810000'>
+     <title>Shape810000</title>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='8'>
+      <title>Shape8</title>
+      <path d='M0,236.692901611 L0,255.118103027 L0,255.118103027 L138.188980103,255.118103027 L138.188980103,255.118103027 L138.188980103,236.692901611 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <path d='M0,236.692901611 L0,0 L0,0 L138.188980103,0 L138.188980103,0 L138.188980103,236.692901611 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+      <path d='M0,236.692901611 L138.188980103,236.692901611 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+      <g transform='matrix(1,0,0,1,1.4173203,237.40157)'>
+       <text x='45.18222' y='4.949291' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,10.26992)'>ShortTeacher</text>
+      </g>
+     </g>
+     <g transform='matrix(1,0,0,1,0,180.70866)' v:mID='9'>
+      <title>Shape9</title>
+      <path d='M0,55.98425293 L138.188980103,55.98425293 L138.188980103,55.98425293 L138.188980103,0 L138.188980103,0 L0,0 L0,0 L0,55.98425293 ' stroke='none' stroke-width='0' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <g transform='matrix(1,0,0,1,4.2519684,19.488192)'>
+       <text x='35.1218' y='-9.898582' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__teacher_id: int;</text>
+       <text x='38.617878' y='0' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__name: string;</text>
+       <text x='33.399937' y='9.898582' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__surname: string;</text>
+       <text x='28.951296' y='19.797165' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,29.049448)'>__patronymic: string;</text>
+      </g>
+     </g>
+     <g transform='matrix(1,0,0,1,0,175.03937)' v:mID='10'>
+      <title>Shape10</title>
+      <path d='M0,2.834645748 L138.188980103,2.834645748 ' stroke='#000000' stroke-width='0.70866144' stroke-linecap='round' fill='none'/>
+     </g>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='11'>
+      <title>Shape11</title>
+      <path d='M0,175.039367676 L138.188980103,175.039367676 L138.188980103,175.039367676 L138.188980103,0 L138.188980103,0 L0,0 L0,0 L0,175.039367676 ' stroke='none' stroke-width='0' fill='#FFFFFF'  fill-rule='evenodd'/>
+      <g transform='matrix(1,0,0,1,4.2519684,79.015755)'>
+       <text x='11.911926' y='-69.29007' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>val_teacher_id(teacher_id): int;</text>
+       <text x='35.41985' y='-59.391487' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>val_name(name):</text>
+       <text x='24.983967' y='-49.492912' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>val_surname(surname):</text>
+       <text x='16.086683' y='-39.59433' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>val_patronymic(patronymic):</text>
+       <text x='36.728867' y='-19.797165' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>teacher_id(): int;</text>
+       <text x='40.224945' y='-9.898582' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>name(): string;</text>
+       <text x='35.007008' y='0' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>surname(): string;</text>
+       <text x='30.558365' y='9.898582' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>patronymic(): string;</text>
+       <text x='25.068552' y='29.69575' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>teacher_id(value): void;</text>
+       <text x='33.557022' y='39.59433' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>name(value): void;</text>
+       <text x='28.339079' y='49.492912' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>surname(value): void;</text>
+       <text x='23.890436' y='59.391487' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>patronymic(value): void;</text>
+       <text x='33.335495' y='79.188644' class='TextStyle0' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,88.577)'>&#160;__str__(): string;&#160;&#160;&#160;</text>
+      </g>
+     </g>
+    </g>
+    <g transform='matrix(1,0,0,1,577.559,902.83466)' v:mID='12'>
+     <title>Dynamic connector.12</title>
+     <g transform='matrix(1,0,0,1,0,0)' v:mID='12'>
+      <title>Dynamic connector.12</title>
+      <path d='M35.396221161,-7.571338654 L60.236221313,0.708661437 L35.396221161,8.988661766 Z' stroke='#000000' stroke-width='1.4173229' fill='none' stroke-opacity='0' transform='matrix(1,0,0,1,0,0)'/>
+      <path d='M0,0.708661437 L0,0.708661437 L0,0.708661437 L35.396221161,0.708661437 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none' stroke-opacity='0'/>
+     </g>
+     <path d='M35.396221161,-7.571338654 L60.236221313,0.708661437 L35.396221161,8.988661766 Z' stroke='#000000' stroke-width='1.4173229' fill='none' transform='matrix(1,0,0,1,0,0)'/>
+     <path d='M0,0.708661437 L0,0.708661437 L0,0.708661437 L35.396221161,0.708661437 ' stroke='#000000' stroke-width='1.4173229' stroke-linecap='round' fill='none'/>
+     <g transform='matrix(1,0,0,1,-22.677166,-3.8976378)'>
+      <path d='M55.838191986,-2.662741661 L57.547634125,-2.662741661 L57.547634125,6.567504883 L55.838191986,6.567504883 Z' stroke='none' stroke-width='0' fill='#FFFFFF'  fill-rule='evenodd' transform='matrix(1,0,0,-1,0,6.8747244)'/>
+      <text x='55.838192' y='4.5368505' class='TextStyle1' fill='#000000' opacity='1' transform='matrix(1,0,0,-1,0,6.8747244)'>&#160;</text>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+ <style type='text/css'><![CDATA[ .TextStyle0 {font-family:Calibri;font-size:8.248819px;}.TextStyle1 {font-family:Calibri;font-size:7.5614176px;} ]]></style>
+</svg>

@@ -30,10 +30,14 @@ class ShortTeacher():
         if not isinstance(patronymic, str) or not patronymic.strip():
             raise ValueError("Ошибка ввода  отчества ")
         return patronymic
+
     @property
     def teacher_id(self):
         return self.__teacher_id
 
+    @teacher_id.setter
+    def teacher_id(self, value):
+        self.__teacher_id=self.val_surname(value)
     @property
     def name(self):
         return self.__name
