@@ -1,0 +1,16 @@
+- teacher_id: 4
+  name: John
+  surname: Doe
+  patronymic: Junior
+  phone: 89949889112
+  work_experience: 5
+  department: Math
+  group_id: 101
+- teacher_id: 5
+  name: Jane
+  surname: Doe
+  patronymic: Junior
+  phone: 89949889113
+  work_experience: 3
+  department: Math
+  group_id: 102

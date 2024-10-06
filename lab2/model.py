@@ -1,7 +1,8 @@
 import json
 import re
 import uuid
-
+import yaml
+from abc import ABC, abstractmethod
 class ShortTeacher():
     def __init__(self, teacher_id, name, surname, patronymic):
         self.__teacher_id = self.val_teacher_id(teacher_id)
@@ -190,29 +191,19 @@ class Teacher(ShortTeacher):
                 and self.department == other.department
                 and self.group_id == other.group_id
         )
-class Teacher_RepJson:
+class TeacherRep(ABC):
     def __init__(self, file):
         self.file = file
         self.teachers = self.read_all()
 
-    # чтение файла
+    @abstractmethod
     def read_all(self):
-        try:
-            with open(self.file, 'r') as file:
-                f = file.read()
-                if not f.strip():
-                    # Файл пустой или содержит только пробельные символы
-                    return []
-                data = json.loads(f)
-                return [teacher_data for teacher_data in data]
-        except json.JSONDecodeError as e:
-            print(f"Ошибка разбора JSON: {e}")
+        pass
 
-
+    @abstractmethod
     def write_all(self):
-        teachers_data = [teacher.ser_obj() for teacher in self.teachers]
-        with open(self.file, 'w') as file:
-            json.dump(teachers_data, file)
+        pass
+
     def add_teacher_to_file(self, teacher):
         self.teachers.append(teacher)
         self.write_all()
@@ -225,6 +216,7 @@ class Teacher_RepJson:
 
     def sort_by_work_experience(self):
         self.teachers.sort(key=lambda x: x["work_experience"])
+
     def add_teacher(self, teacher):
         if not self.teachers:
             teacher["teacher_id"] = 1
@@ -246,23 +238,54 @@ class Teacher_RepJson:
 
     def get_count(self):
         return len(self.teachers)
+
     def __str__(self):
         return f"{self.teachers}"
+
     def get_k_n_short_list(self,k,n):
-        res=[]
-        for i in range(0,len(self.teachers)):
-            if (i+1)//n+1==k:
-                res.append(self.teachers[i])
-        if  res:
-            return res
-        return None
+        return self.teachers[(k - 1) * n:(k - 1) * n+n]
+
+
+class Teacher_RepJson(TeacherRep):
+    def read_all(self):
+        try:
+            with open(self.file, 'r') as file:
+                f = file.read()
+                if not f.strip():
+                    return []
+                data = json.loads(f)
+                return [teacher_data for teacher_data in data]
+        except json.JSONDecodeError as e:
+            print(f"Ошибка разбора JSON: {e}")
+
+    def write_all(self):
+        teachers_data = [teacher.ser_obj() for teacher in self.teachers]
+        with open(self.file, 'w') as file:
+            json.dump(teachers_data, file)
+
+
+class Teacher_RepYaml(TeacherRep):
+    def read_all(self):
+        try:
+            with open(self.file, 'r') as file:
+                data = yaml.safe_load(file)
+                return data
+        except yaml.YAMLError as e:
+            print(f"Ошибка разбора YAML: {e}")
+
+    def write_all(self):
+        teachers_data = [teacher.ser_obj() for teacher in self.teachers]
+        with open(self.file, 'w') as file:
+            yaml.dump(teachers_data, file)
+
+
 teacher = Teacher(1, "John", "Doe", "Junior", "89949889112", 5, "Math", 101)
 print(teacher.name)
 teacher2=teacher
 
 rep=Teacher_RepJson("Teachers.json")
 teacher2.name = "Jane"
-print(rep.read_all())
+print(rep)
 print(teacher2)
 print(teacher==teacher2)
 
@@ -286,3 +309,10 @@ print(rep.get_k_n_short_list(2,1))
 rep.delet(1)
 print(rep)
 print(rep.get_count())
+
+rep_yaml = Teacher_RepYaml("teachers.yaml")
+print(rep_yaml.get_teacher_by_id(5))
+
+
+
+
