@@ -279,45 +279,73 @@ class Teacher_RepYaml(TeacherRep):
         teachers_data = [teacher.ser_obj() for teacher in self.teachers]
         with open(self.file, 'w') as file:
             yaml.dump(teachers_data, file)
+
+
+class Database:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Database, cls).__new__(cls)
+            cls._instance.host = kwargs.get('host')
+            cls._instance.dbname = kwargs.get('dbname')
+            cls._instance.user = kwargs.get('user')
+            cls._instance.password = kwargs.get('password')
+            cls._instance.port = kwargs.get('port')
+            cls._instance.conn = None
+            cls._instance.cursor = None
+        return cls._instance
+
+    def connect(self):
+        self.conn = psycopg2.connect(
+            host=self.host,
+            database=self.dbname,
+            user=self.user,
+            password=self.password,
+            port=self.port
+        )
+        self.cursor = self.conn.cursor()
+
+    def close(self):
+        self.conn.close()
+
+
 class Teacher_rep_DB:
-    def __init__(self, db):
+    def __init__(self, db: Database):
         self.db = db
-        self.cursor = db.cursor()
 
     def get_teacher_by_id(self, teacher_id):
-        self.cursor.execute("SELECT * FROM teachers WHERE teacher_id = %s", (teacher_id,))
-        row = self.cursor.fetchone()
+        self.db.cursor.execute("SELECT * FROM teachers WHERE teacher_id = %s", (teacher_id,))
+        row = self.db.cursor.fetchone()
         if row:
             return Teacher(*row)
         return None
 
     def get_k_n_short_list(self, k, n):
-        self.cursor.execute("SELECT * FROM teachers LIMIT %s OFFSET %s", (n, (k-1)*n))
-        rows = self.cursor.fetchall()
+        self.db.cursor.execute("SELECT * FROM teachers LIMIT %s OFFSET %s", (n, (k-1)*n))
+        rows = self.db.cursor.fetchall()
         return [ShortTeacher(*row[:4]) for row in rows]
 
     def add_teacher(self, teacher):
-        self.cursor.execute("INSERT INTO teachers (name, surname, patronymic, phone, work_experience, department, group_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING teacher_id",
-                            (teacher.name, teacher.surname, teacher.patronymic, teacher.phone, teacher.work_experience, teacher.department, teacher.group_id))
-        self.db.commit()
-
+        self.db.cursor.execute("INSERT INTO teachers (name, surname, patronymic, phone, work_experience, department, group_id) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING teacher_id",
+                              (teacher.name, teacher.surname, teacher.patronymic, teacher.phone, teacher.work_experience, teacher.department, teacher.group_id))
+        self.db.conn.commit()
 
     def update_teacher_by_id(self, teacher_id, teacher):
-        self.cursor.execute("UPDATE teachers SET name = %s, surname = %s, patronymic = %s, phone = %s, work_experience = %s, department = %s, group_id = %s WHERE teacher_id = %s",
-                            (teacher.name, teacher.surname, teacher.patronymic, teacher.phone, teacher.work_experience, teacher.department, teacher.group_id, teacher_id))
-        self.db.commit()
+        self.db.cursor.execute("UPDATE teachers SET name = %s, surname = %s, patronymic = %s, phone = %s, work_experience = %s, department = %s, group_id = %s WHERE teacher_id = %s",
+                              (teacher.name, teacher.surname, teacher.patronymic, teacher.phone, teacher.work_experience, teacher.department, teacher.group_id, teacher_id))
+        self.db.conn.commit()
 
     def delet(self, teacher_id):
-        self.cursor.execute("DELETE FROM teachers WHERE teacher_id = %s", (teacher_id,))
-        self.db.commit()
+        self.db.cursor.execute("DELETE FROM teachers WHERE teacher_id = %s", (teacher_id,))
+        self.db.conn.commit()
 
     def get_count(self):
-        self.cursor.execute("SELECT COUNT(*) FROM teachers")
-        return self.cursor.fetchone()[0]
+        self.db.cursor.execute("SELECT COUNT(*) FROM teachers")
+        return self.db.cursor.fetchone()[0]
 
     def create_table(self):
-        cur = db.cursor()
-        cur.execute("""
+        self.db.cursor.execute("""
             CREATE TABLE IF NOT EXISTS teachers (
                 teacher_id SERIAL PRIMARY KEY,
                 name VARCHAR(50) NOT NULL,
@@ -329,7 +357,7 @@ class Teacher_rep_DB:
                 group_id INTEGER NOT NULL
             );
         """)
-        db.commit()
+        self.db.conn.commit()
 
 
 
@@ -368,9 +396,10 @@ rep_yaml = Teacher_RepYaml("teachers.yaml")
 print(rep_yaml.get_teacher_by_id(5))
 
 
-db=psycopg2.connect(host=host,database=dbname,user=user,password=password)
+db = Database(host=host, dbname=dbname, user=user, password=password, port=port)
+db.connect()
 
-db_worker=Teacher_rep_DB(db)
+db_worker= Teacher_rep_DB(db)
 db_worker.create_table()
 #db_worker.add_teacher(teacher)
 print(db_worker.get_teacher_by_id(1))
