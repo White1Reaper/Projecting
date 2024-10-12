@@ -359,6 +359,42 @@ class Teacher_rep_DB:
         """)
         self.db.conn.commit()
 
+class Adapter(TeacherRep):
+    def __init__(self, db_worker: Teacher_rep_DB, file=None):
+        super().__init__(file)
+        self.db_worker = db_worker
+
+    def add_teacher_to_file(self, teacher):
+        pass # не используется в данном случае
+
+    def get_teacher_by_id(self, teacher_id):
+        teacher = self.db_worker.get_teacher_by_id(teacher_id)
+        if teacher:
+            return teacher.ser_obj()
+        return "Такого учителя нет"
+
+    def sort_by_work_experience(self):
+        pass  # не используется в данном случае
+
+    def add_teacher(self, teacher):
+        self.db_worker.add_teacher(teacher)
+
+    def update_teacher_by_id(self, teacher_id, t):
+        self.db_worker.update_teacher_by_id(teacher_id, t)
+
+    def delet(self, teacher_id):
+        self.db_worker.delet(teacher_id)
+
+    def get_count(self):
+        return self.db_worker.get_count()
+
+    def get_k_n_short_list(self, k, n):
+        return [teacher.ser_obj() for teacher in self.db_worker.get_k_n_short_list(k, n)]
+    def read_all(self):
+        pass# не используется в данном случае
+
+    def write_all(self):
+        pass# не используется в данном случае
 
 
 teacher = Teacher(1, "John", "Doe", "Junior", "89949889112", 5, "Math", 101)
@@ -402,5 +438,7 @@ db.connect()
 db_worker= Teacher_rep_DB(db)
 db_worker.create_table()
 #db_worker.add_teacher(teacher)
-print(db_worker.get_teacher_by_id(1))
+adapter = Adapter(db_worker)
+adapter.add_teacher_to_file(teacher)
+print(adapter.get_teacher_by_id(1))
 db.close()
