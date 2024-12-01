@@ -1,12 +1,13 @@
 import json
 import re
-import tkinter
-import uuid
+
 import yaml
 from abc import ABC, abstractmethod
 import psycopg2
 from config import host, dbname, user, password, port
 from tkinter import *
+from tkinter import ttk
+
 import tkinter as tk
 
 
@@ -276,7 +277,7 @@ class TeacherRep(TeacherRepBase):
 
     def add_teacher_to_file(self, teacher):
         self.teachers.append(teacher)
-        self.storage_strategy.write_all(self.file, self.teachers)
+        self.strategy.write_all(self.teachers)
 
     def get_teacher_by_id(self, teacher_id):
         for teacher in self.teachers:
@@ -583,57 +584,97 @@ class Observer(ABC):
     def update(self, data):
         pass
 
+class Subject:
+    def __init__(self):
+        self.observers = []
+
+    def attach(self, observer) -> None:
+        self.observers.append(observer)
+        print("наблюдатель добавлен")
+    def detach(self, observer: Observer) -> None:
+        self.observers.remove(observer)
+
+    def notify(self, data):
+        for observer in self.observers:
+            observer.update(data)
+            print("уведомление получил!")
+
+class TeacherController(Subject):
+    def __init__(self, repository):
+        super().__init__()
+        self.repository = repository
+
+        self.view = TeacherView(self)
+        self.attach(self.view)
+
+        self.view.window.mainloop()
+
+    def refresh_teachers(self):
+        try:
+            teachers = self.repository.teachers()
+            self.notify(teachers)
+        except Exception as e:
+            print(f"Ошибка при обновлении списка преподавателей: {e}")
+
+    def add_teacher(self, teacher):
+        try:
+            self.repository.add_teacher(teacher)
+            self.notify(self.repository.teachers())
+        except Exception as e:
+            print(f"Ошибка при добавлении преподавателя: {e}")
+
+    def update_teacher(self, teacher_id, teacher_data):
+        try:
+            self.repository.update_teacher_by_id(teacher_id, teacher_data)
+            self.notify(self.repository.teachers())
+        except Exception as e:
+            print(f"Ошибка при обновлении преподавателя: {e}")
+
+    def delete_teacher(self, teacher_id):
+        try:
+            self.repository.delet(teacher_id)
+            self.notify(self.repository.teachers())
+        except Exception as e:
+            print(f"Ошибка при удалении преподавателя: {e}")
 
 class TeacherView(Observer):
     def __init__(self, controller):
         self.controller = controller
         self.window = Tk()
         self.window.title("Управление Преподавателями")
-        self.window.geometry("1000x500")
-        self.teachers_listbox = Listbox(self.window,width=100,yscrollcommand=tk.Scrollbar(self.window,orient="vertical").set)
-        self.teachers_listbox.pack()
+        self.window.geometry("800x400")
 
-        self.refresh_button = Button(self.window, text="обновить", command=self.refresh_teachers)
+        # Создание таблицы
+        self.tree = ttk.Treeview(self.window, columns=("ID", "Имя", "Фамилия", "Отчество", "Телефон", "Стаж", "Кафедра", "ID Группы"), show='headings')
+        self.tree.heading("ID", text="ID")
+        self.tree.heading("Имя", text="Имя")
+        self.tree.heading("Фамилия", text="Фамилия")
+        self.tree.heading("Отчество", text="Отчество")
+        self.tree.heading("Телефон", text="Телефон")
+        self.tree.heading("Стаж", text="Стаж")
+        self.tree.heading("Кафедра", text="Кафедра")
+        self.tree.heading("ID Группы", text="ID Группы")
+        self.tree.pack(expand=True)
+
+        self.refresh_button = Button(self.window, text="Обновить", command=self.refresh_teachers)
         self.refresh_button.pack()
 
         self.refresh_teachers()
 
-        self.window.mainloop()
-
     def update(self, data):
-        self.teachers_listbox.delete(0, END)
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+
         for teacher in data:
-            self.teachers_listbox.insert(END, teacher.short_output())
-
-
-    def refresh_teachers(self):
-        teachers = self.controller.repository.teachers()
-        self.update(teachers)
-
-
-class TeacherController:
-    def __init__(self, repository):
-        self.repository = repository
-        self.view = TeacherView(self)
+            self.tree.insert("", END, values=(teacher.teacher_id, teacher.name, teacher.surname, teacher.patronymic, teacher.phone, teacher.work_experience, teacher.department, teacher.group_id))
 
     def refresh_teachers(self):
-        teachers = self.repository.teachers()
-        self.view.update(teachers)
-
-    def add_teacher(self, teacher):
-        self.repository.add_teacher(teacher)
-        self.refresh_teachers()
-
-    def update_teacher(self, teacher_id, teacher_data):
-        self.repository.update_teacher_by_id(teacher_id, teacher_data)
-        self.refresh_teachers()
-
-    def delete_teacher(self, teacher_id):
-        self.repository.delet(teacher_id)
-        self.refresh_teachers()
+        self.controller.refresh_teachers()  # Вызываем метод контроллера для обновления данных
 
 
 
+
+'''
 teacher = Teacher(1, "John", "Doe", "Junior", "89949889112", 5, "Math", 101)
 print(teacher.name)
 teacher2=teacher
@@ -647,7 +688,7 @@ print(teacher2)
 print(teacher==teacher2)
 print("------------------------------------------------------------------------------------")
 print("jsons")
-'''
+
 with open("example.json", "r") as f:
     data = f.read()
     teacher = Teacher.from_json(data)
@@ -655,7 +696,7 @@ with open("example.json", "r") as f:
     print(teacher.short_output())# краткий вывод объекта
     short=ShortTeacher(1, "John", "Doe", "Junior")
     print(short)
-'''
+
 strteacher="gggg bbbb hhh 89949885112 5 En 222"
 strteacher=Teacher.from_string(strteacher)
 
@@ -702,6 +743,7 @@ print(filtered_rep.get_count())
 filtered_count = sorted_rep.get_k_n_short_list(1,1)
 for teacher in filtered_count:
     print(teacher)
+'''
 
 
 if __name__ == "__main__":
@@ -712,9 +754,8 @@ if __name__ == "__main__":
     db_worker.create_table()
     adapter = Adapter(db_worker)
 
-    controller = TeacherController(adapter)
-
-db.close()
+    controller = TeacherController(adapter) 
+    db.close()
 
 
 
