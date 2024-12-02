@@ -608,7 +608,6 @@ class TeacherController(Subject):
         self.attach(self.view)
 
         self.view.window.mainloop()
-
     def refresh_teachers(self):
         try:
             teachers = self.repository.teachers()
@@ -659,7 +658,12 @@ class TeacherView(Observer):
         self.refresh_button = Button(self.window, text="Обновить", command=self.refresh_teachers)
         self.refresh_button.pack()
 
-        self.refresh_teachers()
+        self.add_button = Button(self.window, text="Добавить учителя", command=self.open_add_teacher)
+        self.add_button.pack()
+
+
+    def open_add_teacher(self):
+        AddTeacherController(self.controller.repository,self.controller)
 
     def update(self, data):
         for row in self.tree.get_children():
@@ -670,7 +674,94 @@ class TeacherView(Observer):
 
     def refresh_teachers(self):
         self.controller.refresh_teachers()  # Вызываем метод контроллера для обновления данных
+class AddTeacherController:
+    def __init__(self, repository, main_controller):
+        self.repository = repository
+        self.view = AddTeacherView(self)
+        self.main_controller=main_controller
+    def add_teacher(self, teacher):
+        try:
+            self.repository.add_teacher(teacher)
+            print("Преподаватель добавлен успешно.")
+            self.notify()
+        except Exception as e:
+            print(f"Ошибка при добавлении преподавателя: {e}")
 
+    def notify(self):
+        self.main_controller.refresh_teachers()
+class AddTeacherView:
+    def __init__(self, controller):
+        self.controller = controller
+        self.window = Toplevel()
+        self.window.title("Добавить Преподавателя")
+        self.window.geometry("400x300")
+
+        self.name_label = Label(self.window, text="Имя:")
+        self.name_label.pack()
+        self.name_entry = Entry(self.window)
+        self.name_entry.pack()
+
+        self.surname_label = Label(self.window, text="Фамилия:")
+        self.surname_label.pack()
+        self.surname_entry = Entry(self.window)
+        self.surname_entry.pack()
+
+        self.patronymic_label = Label(self.window, text="Отчество:")
+        self.patronymic_label.pack()
+        self.patronymic_entry = Entry(self.window)
+        self.patronymic_entry.pack()
+
+        self.phone_label = Label(self.window, text="Телефон:")
+        self.phone_label.pack()
+        self.phone_entry = Entry(self.window)
+        self.phone_entry.pack()
+
+        self.work_experience_label = Label(self.window, text="Стаж:")
+        self.work_experience_label.pack()
+        self.work_experience_entry = Entry(self.window)
+        self.work_experience_entry.pack()
+
+        self.department_label = Label(self.window, text="Кафедра:")
+        self.department_label.pack()
+        self.department_entry = Entry(self.window)
+        self.department_entry.pack()
+
+        self.group_id_label = Label(self.window, text="ID Группы:")
+        self.group_id_label.pack()
+        self.group_id_entry = Entry(self.window)
+        self.group_id_entry.pack()
+
+        self.add_button = Button(self.window, text="Добавить", command=self.add_teacher)
+        self.add_button.pack()
+
+        self.cancel_button = Button(self.window, text="Отмена", command=self.window.destroy)
+        self.cancel_button.pack()
+
+    def add_teacher(self):
+        name = self.name_entry.get()
+        surname = self.surname_entry.get()
+        patronymic = self.patronymic_entry.get()
+        phone = self.phone_entry.get()
+        work_experience = self.work_experience_entry.get()
+        department = self.department_entry.get()
+        group_id = self.group_id_entry.get()
+        try:
+            work_experience = int(work_experience)
+            group_id = int(group_id)
+            new_teacher = Teacher(
+                teacher_id=1,
+                name=name,
+                surname=surname,
+                patronymic=patronymic,
+                phone=phone,
+                work_experience=work_experience,
+                department=department,
+                group_id=group_id
+            )
+            self.controller.add_teacher(new_teacher)
+            self.window.destroy()
+        except ValueError as e:
+            print(f"Ошибка: {e}")
 
 
 
