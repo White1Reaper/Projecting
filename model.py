@@ -10,7 +10,7 @@ from tkinter import ttk
 
 import tkinter as tk
 
-
+import inspect
 class ShortTeacher:
     def __init__(self, teacher_id, name, surname, patronymic):
         self.teacher_id = teacher_id
@@ -96,10 +96,10 @@ class ShortTeacher:
 class Teacher(ShortTeacher):
     def __init__(self, teacher_id, name, surname, patronymic, phone, work_experience, department, group_id):
         super().__init__(teacher_id, name, surname, patronymic)
-        self.__phone = phone
-        self.__work_experience = work_experience
-        self.__department = department
-        self.__group_id = group_id
+        self.phone = phone
+        self.work_experience = work_experience
+        self.department = department
+        self.group_id = group_id
 
     def ser_obj(self):
         return {
@@ -177,7 +177,6 @@ class Teacher(ShortTeacher):
         if not self.val_phone(value):
             raise ValueError("Ошибка ввода телефона")
         self.__phone = value
-
     @property
     def work_experience(self):
         return self.__work_experience
@@ -606,8 +605,9 @@ class TeacherController(Subject):
 
         self.view = TeacherView(self)
         self.attach(self.view)
-
+        self.refresh_teachers()
         self.view.window.mainloop()
+
     def refresh_teachers(self):
         try:
             teachers = self.repository.teachers()
@@ -660,6 +660,7 @@ class TeacherView(Observer):
 
         self.add_button = Button(self.window, text="Добавить учителя", command=self.open_add_teacher)
         self.add_button.pack()
+
         self.edit_button = Button(self.window, text="Редактировать учителя", command=self.open_edit_teacher)
         self.edit_button.pack()
 
@@ -676,8 +677,7 @@ class TeacherView(Observer):
             print("выберите преподавателя для редактирования")
 
     def open_add_teacher(self):
-        AddTeacherController(self.controller.repository,self.controller)
-
+        AddTeacherController(self.controller.repository, self.controller)
 
     def update(self, data):
         for row in self.tree.get_children():
@@ -689,11 +689,107 @@ class TeacherView(Observer):
     def refresh_teachers(self):
         self.controller.refresh_teachers()  # Вызываем метод контроллера для обновления данных
 
+class AddOrEditTeacherView:
+    def __init__(self, controller, teacher=None):
+        self.controller = controller
+        self.teacher = teacher
+        self.window = Toplevel()
+        self.window.title("Добавить/Редактировать преподавателя")
+        self.window.geometry("400x350")
+
+        self.name_label = Label(self.window, text="Имя:")
+        self.name_label.pack()
+        self.name_entry = Entry(self.window)
+        self.name_entry.pack()
+
+        self.surname_label = Label(self.window, text="Фамилия:")
+        self.surname_label.pack()
+        self.surname_entry = Entry(self.window)
+        self.surname_entry.pack()
+
+        self.patronymic_label = Label(self.window, text="Отчество:")
+        self.patronymic_label.pack()
+        self.patronymic_entry = Entry(self.window)
+        self.patronymic_entry.pack()
+
+        self.phone_label = Label(self.window, text="Телефон:")
+        self.phone_label.pack()
+        self.phone_entry = Entry(self.window)
+        self.phone_entry.pack()
+
+        self.work_experience_label = Label(self.window, text="Стаж:")
+        self.work_experience_label.pack()
+        self.work_experience_entry = Entry(self.window)
+        self.work_experience_entry.pack()
+
+        self.department_label = Label(self.window, text="Кафедра:")
+        self.department_label.pack()
+        self.department_entry = Entry(self.window)
+        self.department_entry.pack()
+
+        self.group_id_label = Label(self.window, text="ID группы:")
+        self.group_id_label.pack()
+        self.group_id_entry = Entry(self.window)
+        self.group_id_entry.pack()
+
+        self.save_button = Button(self.window, text="Сохранить", command=self.work_with_teachers)
+        self.save_button.pack()
+
+        self.cancel_button = Button(self.window, text="Отмена", command=self.window.destroy)
+        self.cancel_button.pack()
+
+
+        if self.teacher:
+            self.fields()
+
+    def fields(self):
+        self.name_entry.insert(0, self.teacher.name)
+        self.surname_entry.insert(0, self.teacher.surname)
+        self.patronymic_entry.insert(0, self.teacher.patronymic)
+        self.phone_entry.insert(0, self.teacher.phone)
+        self.work_experience_entry.insert(0, self.teacher.work_experience)
+        self.department_entry.insert(0, self.teacher.department)
+        self.group_id_entry.insert(0, self.teacher.group_id)
+
+    def work_with_teachers(self):
+        name = self.name_entry.get()
+        surname = self.surname_entry.get()
+        patronymic = self.patronymic_entry.get()
+        phone = self.phone_entry.get()
+        work_experience = self.work_experience_entry.get()
+        department = self.department_entry.get()
+        group_id = self.group_id_entry.get()
+        try:
+            work_experience = int(work_experience)
+            group_id = int(group_id)
+            view_teacher = Teacher(
+                teacher_id=self.teacher.teacher_id if self.teacher else 1,
+                name=name,
+                surname=surname,
+                patronymic=patronymic,
+                phone=phone,
+                work_experience=work_experience,
+                department=department,
+                group_id=group_id
+            )
+            if isinstance(self.controller, EditTeacherController):
+                self.controller.update_teacher(view_teacher)
+                self.window.destroy()
+            else:
+                self.controller.add_teacher(view_teacher)
+                self.window.destroy()
+        except ValueError as e:
+            print(f"Ошибка: {e}")
+
+
+
+
 
 class AddTeacherController:
     def __init__(self, repository, main_controller):
         self.repository = repository
-        self.view = AddTeacherView(self)
+        self.view = AddOrEditTeacherView(self)
+
         self.main_controller=main_controller
     def add_teacher(self, teacher):
         try:
@@ -705,85 +801,14 @@ class AddTeacherController:
 
     def notify(self):
         self.main_controller.refresh_teachers()
-class AddTeacherView:
-    def __init__(self, controller):
-        self.controller = controller
-        self.window = Toplevel()
-        self.window.title("Добавить Преподавателя")
-        self.window.geometry("400x300")
 
-        self.name_label = Label(self.window, text="Имя:")
-        self.name_label.pack()
-        self.name_entry = Entry(self.window)
-        self.name_entry.pack()
-
-        self.surname_label = Label(self.window, text="Фамилия:")
-        self.surname_label.pack()
-        self.surname_entry = Entry(self.window)
-        self.surname_entry.pack()
-
-        self.patronymic_label = Label(self.window, text="Отчество:")
-        self.patronymic_label.pack()
-        self.patronymic_entry = Entry(self.window)
-        self.patronymic_entry.pack()
-
-        self.phone_label = Label(self.window, text="Телефон:")
-        self.phone_label.pack()
-        self.phone_entry = Entry(self.window)
-        self.phone_entry.pack()
-
-        self.work_experience_label = Label(self.window, text="Стаж:")
-        self.work_experience_label.pack()
-        self.work_experience_entry = Entry(self.window)
-        self.work_experience_entry.pack()
-
-        self.department_label = Label(self.window, text="Кафедра:")
-        self.department_label.pack()
-        self.department_entry = Entry(self.window)
-        self.department_entry.pack()
-
-        self.group_id_label = Label(self.window, text="ID Группы:")
-        self.group_id_label.pack()
-        self.group_id_entry = Entry(self.window)
-        self.group_id_entry.pack()
-
-        self.add_button = Button(self.window, text="Добавить", command=self.add_teacher)
-        self.add_button.pack()
-
-        self.cancel_button = Button(self.window, text="Отмена", command=self.window.destroy)
-        self.cancel_button.pack()
-
-    def add_teacher(self):
-        name = self.name_entry.get()
-        surname = self.surname_entry.get()
-        patronymic = self.patronymic_entry.get()
-        phone = self.phone_entry.get()
-        work_experience = self.work_experience_entry.get()
-        department = self.department_entry.get()
-        group_id = self.group_id_entry.get()
-        try:
-            work_experience = int(work_experience)
-            group_id = int(group_id)
-            new_teacher = Teacher(
-                teacher_id=1,
-                name=name,
-                surname=surname,
-                patronymic=patronymic,
-                phone=phone,
-                work_experience=work_experience,
-                department=department,
-                group_id=group_id
-            )
-            self.controller.add_teacher(new_teacher)
-            self.window.destroy()
-        except ValueError as e:
-            print(f"Ошибка: {e}")
 
 class EditTeacherController:
     def __init__(self, repository, main_controller, teacher):
         self.repository = repository
         self.main_controller = main_controller
-        self.view = EditTeacherView(self, teacher)
+        self.view = AddOrEditTeacherView(self, teacher)
+
 
     def update_teacher(self, teacher):
         try:
@@ -794,89 +819,6 @@ class EditTeacherController:
             print(f"Ошибка при обновлении преподавателя: {e}")
     def notify(self):
         self.main_controller.refresh_teachers()
-class EditTeacherView:
-    def __init__(self, controller, teacher):
-        self.controller = controller
-        self.teacher = teacher
-        self.window = Toplevel()
-        self.window.title("Редактировать Преподавателя")
-        self.window.geometry("400x350")
-
-        self.name_label = Label(self.window, text="Имя:")
-        self.name_label.pack()
-        self.name_entry = Entry(self.window)
-        self.name_entry.insert(0, teacher.name)
-        self.name_entry.pack()
-
-        self.surname_label = Label(self.window, text="Фамилия:")
-        self.surname_label.pack()
-        self.surname_entry = Entry(self.window)
-        self.surname_entry.insert(0, teacher.surname)
-        self.surname_entry.pack()
-
-        self.patronymic_label = Label(self.window, text="Отчество:")
-        self.patronymic_label.pack()
-        self.patronymic_entry = Entry(self.window)
-        self.patronymic_entry.insert(0, teacher.patronymic)
-        self.patronymic_entry.pack()
-
-        self.phone_label = Label(self.window, text="Телефон:")
-        self.phone_label.pack()
-        self.phone_entry = Entry(self.window)
-        self.phone_entry.insert(0, teacher.phone)
-        self.phone_entry.pack()
-
-        self.work_experience_label = Label(self.window, text="Стаж:")
-        self.work_experience_label.pack()
-        self.work_experience_entry = Entry(self.window)
-        self.work_experience_entry.insert(0, teacher.work_experience)
-        self.work_experience_entry.pack()
-
-        self.department_label = Label(self.window, text="Кафедра:")
-        self.department_label.pack()
-        self.department_entry = Entry(self.window)
-        self.department_entry.insert(0, teacher.department)
-        self.department_entry.pack()
-
-        self.group_id_label = Label(self.window, text="ID Группы:")
-        self.group_id_label.pack()
-        self.group_id_entry = Entry(self.window)
-        self.group_id_entry.insert(0, teacher.group_id)
-        self.group_id_entry.pack()
-
-        self.save_button = Button(self.window, text="Сохранить", command=self.save_teacher)
-        self.save_button.pack()
-
-        self.cancel_button = Button(self.window, text="Отмена", command=self.window.destroy)
-        self.cancel_button.pack()
-
-    def save_teacher(self):
-        name = self.name_entry.get()
-        surname = self.surname_entry.get()
-        patronymic = self.patronymic_entry.get()
-        phone = self.phone_entry.get()
-        work_experience = self.work_experience_entry.get()
-        department = self.department_entry.get()
-        group_id = self.group_id_entry.get()
-
-        try:
-            work_experience = int(work_experience)
-            group_id = int(group_id)
-            updated_teacher = Teacher(
-                teacher_id=self.teacher.teacher_id,
-                name=name,
-                surname=surname,
-                patronymic=patronymic,
-                phone=phone,
-                work_experience=work_experience,
-                department=department,
-                group_id=group_id
-            )
-            self.controller.update_teacher(updated_teacher)
-            self.window.destroy()
-        except ValueError as e:
-            print(f"Ошибка: {e}")
-
 
 '''
 teacher = Teacher(1, "John", "Doe", "Junior", "89949889112", 5, "Math", 101)
