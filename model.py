@@ -732,15 +732,15 @@ class AddOrEditTeacherView:
         self.group_id_entry = Entry(self.window)
         self.group_id_entry.pack()
 
-        self.save_button = Button(self.window, text="Сохранить", command=self.work_with_teachers)
+        self.save_button = Button(self.window, text="Сохранить", command=self._SetController)
         self.save_button.pack()
 
         self.cancel_button = Button(self.window, text="Отмена", command=self.window.destroy)
         self.cancel_button.pack()
-
-
         if self.teacher:
             self.fields()
+
+
 
     def fields(self):
         self.name_entry.insert(0, self.teacher.name)
@@ -751,7 +751,23 @@ class AddOrEditTeacherView:
         self.department_entry.insert(0, self.teacher.department)
         self.group_id_entry.insert(0, self.teacher.group_id)
 
-    def work_with_teachers(self):
+    #фабрика
+    def _SetController(self):
+        if isinstance(self.controller, EditTeacherController):
+            return self._edit_teacher()
+        else:
+            return self._add_teacher()
+
+    def _edit_teacher(self):
+        teach=self.take_teacher()
+        self.controller.update_teacher(teach)
+        self.window.destroy()
+    def _add_teacher(self):
+        teach=self.take_teacher()
+        self.controller.add_teacher(teach)
+        self.window.destroy()
+
+    def take_teacher(self):
         name = self.name_entry.get()
         surname = self.surname_entry.get()
         patronymic = self.patronymic_entry.get()
@@ -772,12 +788,8 @@ class AddOrEditTeacherView:
                 department=department,
                 group_id=group_id
             )
-            if isinstance(self.controller, EditTeacherController):
-                self.controller.update_teacher(view_teacher)
-                self.window.destroy()
-            else:
-                self.controller.add_teacher(view_teacher)
-                self.window.destroy()
+            return view_teacher
+
         except ValueError as e:
             print(f"Ошибка: {e}")
 
@@ -819,89 +831,39 @@ class EditTeacherController:
             print(f"Ошибка при обновлении преподавателя: {e}")
     def notify(self):
         self.main_controller.refresh_teachers()
+#  фабрика главного окна и главного контроллера
+class MainFact:
+    def __init__(self, host, dbname, user, password, port):
+        self.host = host
+        self.dbname = dbname
+        self.user = user
+        self.password = password
+        self.port = port
 
-'''
-teacher = Teacher(1, "John", "Doe", "Junior", "89949889112", 5, "Math", 101)
-print(teacher.name)
-teacher2=teacher
+    def conn_db(self):
+        db = Database(host=self.host, dbname=self.dbname, user=self.user, password=self.password, port=self.port)
+        db.connect()
+        return db
 
-file_json=JsonStrategy("Teachers.json")
-teacher2.name = "Jane"
-rep_json=TeacherRep(file_json)
+    def rep(self, db):
+        db_worker = Teacher_rep_DB(db)
+        db_worker.create_table()
+        return Adapter(db_worker)
 
+    def create_controller(self, repository):
+        return TeacherController(repository)
 
-print(teacher2)
-print(teacher==teacher2)
-print("------------------------------------------------------------------------------------")
-print("jsons")
+def main():
+    fact = MainFact(host, dbname, user, password, port)
+    db = fact.conn_db()
+    repository = fact.rep(db)
+    fact.create_controller(repository)
+    db.close()
 
-with open("example.json", "r") as f:
-    data = f.read()
-    teacher = Teacher.from_json(data)
-    print(teacher)#полный вывод объекта
-    print(teacher.short_output())# краткий вывод объекта
-    short=ShortTeacher(1, "John", "Doe", "Junior")
-    print(short)
-
-strteacher="gggg bbbb hhh 89949885112 5 En 222"
-strteacher=Teacher.from_string(strteacher)
-
-rep_json.add_teacher(strteacher.ser_obj())
-print(rep_json.get_teacher_by_id(5))
-rep_json.sort_by_work_experience()
-print(rep_json)
-teacher2.name = "hhtvyhr"
-teacher2.group_id=1
-#rep_json.add_teacher(teacher2.ser_obj()) - выдаст ошибку телефона
-teacher2.phone="89949889114"
-rep_json.add_teacher(teacher2.ser_obj())
-print(rep_json)
-rep_json.update_teacher_by_id(3,teacher.ser_obj())
-print(rep_json)
-print(rep_json.get_k_n_short_list(2,1))
-rep_json.delet(1)
-print(rep_json)
-print(rep_json.get_count())
-print("------------------------------------------------------------------------------------")
-print("yamls")
-
-rep_yaml = TeacherRep(YamlStrategy("teachers.yaml"))
-print(rep_yaml.get_teacher_by_id(5))
-
-print()
-print("------------------------------------------------------------------------------------")
-print("база данных")
-db = Database(host=host, dbname=dbname, user=user, password=password, port=port)
-db.connect()
-
-db_worker= Teacher_rep_DB(db)
-db_worker.create_table()
-#db_worker.add_teacher(teacher)
-adapter = Adapter(db_worker)
-print(adapter)
-print(adapter.get_teacher_by_id(1))
-
-print(adapter.get_k_n_short_list(1,2))
-filtered_rep = FilterDecorator_DB(db_worker, filter_by_id)
-sorted_rep = SortDecorator_DB(db_worker, sort_by_surname)
-print(filtered_rep.get_count())
-
-filtered_count = sorted_rep.get_k_n_short_list(1,1)
-for teacher in filtered_count:
-    print(teacher)
-'''
 
 
 if __name__ == "__main__":
-    db = Database(host=host, dbname=dbname, user=user, password=password, port=port)
-    db.connect()
-
-    db_worker = Teacher_rep_DB(db)
-    db_worker.create_table()
-    adapter = Adapter(db_worker)
-
-    controller = TeacherController(adapter) 
-    db.close()
+    main()
 
 
 
