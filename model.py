@@ -663,6 +663,8 @@ class TeacherView(Observer):
 
         self.edit_button = Button(self.window, text="Редактировать учителя", command=self.open_edit_teacher)
         self.edit_button.pack()
+        self.edit_button = Button(self.window, text="Удалить учителя", command=self.delete_teacher)
+        self.edit_button.pack()
 
     def open_edit_teacher(self):
         selected_item = self.tree.selection()
@@ -675,6 +677,20 @@ class TeacherView(Observer):
                 EditTeacherController(self.controller.repository, self.controller, teacher)
         else:
             print("выберите преподавателя для редактирования")
+
+    def delete_teacher(self):
+        selected_item = self.tree.selection()
+        if selected_item:
+            item_id = selected_item[0]
+            item_values = self.tree.item(item_id, 'values')
+            teacher_id = item_values[0]
+            teacher = self.controller.repository.get_teacher_by_id(teacher_id)
+            if teacher:
+                self.controller.delete_teacher(teacher_id)
+        else:
+            print("выберите преподавателя для удаления")
+
+
 
     def open_add_teacher(self):
         AddTeacherController(self.controller.repository, self.controller)
