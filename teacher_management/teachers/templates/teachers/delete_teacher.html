@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher deleting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        a, button {
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<h1>delete teacher </h1>
+<p>delete this teacher: {{ teacher.name }} {{ teacher.surname }}?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">yes</button>
+</form>
+<a href="{% url 'teacher_list' %}">no</a>
+
+</body>
+</html>

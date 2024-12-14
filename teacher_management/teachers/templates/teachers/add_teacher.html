@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Adder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form{
+            background-color: antiquewhite;
+            border-radius: 20px;
+            border: aquamarine solid 2px;
+            width: min-content;
+            display: inline-block;
+        }
+input{
+    width: 200px;
+height: 30px;
+border-radius: 10px;
+border: 2px solid gainsboro;
+}
+        a, button {
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+ul{
+    padding-left: 0;
+    text-align: center;
+}
+li{
+    list-style-type: none;
+    color: red;
+}
+
+
+
+
+
+    </style>
+</head>
+<body>
+<h1>Add Teacher</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+<br>
+<a href="{% url 'teacher_list' %}">Back to list</a>
+
+</form>
+</body>
+</html>
