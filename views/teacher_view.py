@@ -1,16 +1,21 @@
-from tkinter import Tk, Button, ttk
+
 from controllers.add_teacher_controller import AddTeacherController
 from controllers.edit_teacher_controller import EditTeacherController
+from tkinter import Tk, Button, ttk, VERTICAL, HORIZONTAL
 
 class TeacherView:
     def __init__(self, controller):
         self.controller = controller
         self.window = Tk()
         self.window.title("Управление Преподавателями")
-        self.window.geometry("800x400")
+        self.window.geometry("1000x400")
+
+        # Создание фрейма для таблицы и прокрутки
+        frame = ttk.Frame(self.window)
+        frame.pack(expand=True, fill='both')
 
         # Создание таблицы
-        self.tree = ttk.Treeview(self.window, columns=("ID", "Имя", "Фамилия", "Отчество", "Телефон", "Стаж", "Кафедра", "ID Группы"), show='headings')
+        self.tree = ttk.Treeview(frame, columns=("ID", "Имя", "Фамилия", "Отчество", "Телефон", "Стаж", "Кафедра", "ID Группы"), show='headings')
         self.tree.heading("ID", text="ID")
         self.tree.heading("Имя", text="Имя")
         self.tree.heading("Фамилия", text="Фамилия")
@@ -19,7 +24,14 @@ class TeacherView:
         self.tree.heading("Стаж", text="Стаж")
         self.tree.heading("Кафедра", text="Кафедра")
         self.tree.heading("ID Группы", text="ID Группы")
-        self.tree.pack(expand=True)
+
+        for col in self.tree["columns"]:
+            self.tree.column(col, width=100)
+        self.scrollbar = ttk.Scrollbar(frame, orient=VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=self.scrollbar.set)
+
+        self.scrollbar.pack(side='right', fill='y')
+        self.tree.pack(expand=True, fill='both')
 
         self.refresh_button = Button(self.window, text="Обновить", command=self.refresh_teachers)
         self.refresh_button.pack()
